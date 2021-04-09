@@ -57,21 +57,30 @@ q = 0
 global tp
 tp = 0
 ti = 0
+nottox = 0
+nottox_p = 0
 for i in range(0,90):
-
     print(Sobely[i, 0])
+    if nottox == 0:
+        nottox_p = nottox_p + 1
     if Sobely[i,0] > 0:
+        nottox = 2
         q = q + 1
-        tp=1
+        if tp == 0:
+            tp=1
     if tp == 1:
         ss=Sobely[i, 0]
         ti = ti +1
         if Sobely[i,0] < 0:
 
-            tp = 0
+            tp = 2
 if Sobely[39,0] < 0:
     print("Y")
 Sobely = cv2.convertScaleAbs(Sobely)
+ti_r = int(ti/2)+nottox_p
+for i in range(0,100):
+    Sobely[ti_r,i] = 255
+
 
 print(q)
 cv2.imshow("y",Sobely)
@@ -82,6 +91,13 @@ src = MicaPic
 
 # image,contours,hierarchy = cv2.findContours(thd,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 # src=cv2.drawContours(src,contours,-1,(0,255,0),2)
+xl = int(371+ti/2)+nottox_p
+ptStart = (0, xl)
+ptEnd = (512, xl)
+point_color = (255, 255, 255) # BGR
+thickness = 1
+lineType = 4
+cv2.line(src, ptStart, ptEnd, point_color, thickness, lineType)
 
 
 cv2.imshow("result",src)
