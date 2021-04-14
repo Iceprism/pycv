@@ -2,8 +2,17 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import serial
+import time
+
+serialPort="COM5"
+baudRate=115200
+ser=serial.Serial(serialPort, baudRate, timeout=1)
+time.sleep(1)
+
 MicaPic = cv2.imread("../img/w1.png")
 croppedsrc = MicaPic[371:463, 0:512]
+cv2.imshow('cr',croppedsrc)
 cv2.imwrite("cutsrc.jpg",croppedsrc)
 plt.figure("res")
 plt.subplot(121)
@@ -97,7 +106,19 @@ ptEnd = (512, xl)
 point_color = (255, 255, 255) # BGR
 thickness = 1
 lineType = 4
-cv2.line(src, ptStart, ptEnd, point_color, thickness, lineType)
+cv2.line(src, ptStart, ptEnd, point_color, thickness, lineType)\
+
+
+# input_s = 'a'
+# input_s = (input_s + '\r\n').encode('utf-8')
+# result=ser.write(input_s)
+# time.sleep(2)
+input_s = 'cirl180'
+input_s = (input_s + '\r\n').encode('utf-8')
+result=ser.write(input_s)
+time.sleep(2)
+ser.close()#关闭串口
+print("go")
 
 
 cv2.imshow("result",src)
