@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 # 将缺少上边缘或者下边缘的线剔除掉，
 # 选择上下线策略优化，判断前后线有无
+# 去除对比度增强，执行效率提升，0.01s一帧 原0.28s一帧
 
 src = cv2.imread("test2.jpg")
 cv2.imshow("src1", src)
@@ -15,8 +17,11 @@ img = redsrc.copy()
 dst = redsrc.copy()
 srcLine = src.copy()
 
+
+
 a = 1.3
 b = 0
+
 for i in range(rows):
     for j in range(cols):
         color = img[i, j] * a + b
@@ -26,6 +31,11 @@ for i in range(rows):
             dst[i, j] = color
 
 cv2.imshow('dst', dst)
+
+dst = img.copy()
+
+time_start=time.time()
+
 listPixavr = []
 listPix20 = []
 listPix30 = []
@@ -57,11 +67,11 @@ lastPixD = []
 
 for i in range(0, len(listPixavr) - 1):
     subPix = int(listPixavr[i + 1]) - int(listPixavr[i])
-    if subPix > 20:
+    if subPix > 21:
         print(i)
         lastPix.append(i)
         lastPixT.append(i)
-    if subPix < -40:
+    if subPix < -27:
         print(i)
         lastPix.append(i)
         lastPixD.append(i)
@@ -106,12 +116,16 @@ for i in range(rows):
     srcLine[i, 100] = [255, 0, 0]
     srcLine[i, 120] = [255, 0, 0]
 
+time_end=time.time()
+print('totally cost',time_end-time_start)
 
 cv2.imshow("srcLine", srcLine)
 cv2.imwrite("srcLine.jpg", srcLine)
+
 
 file = open('listex.txt', 'w', encoding='utf-8')
 for i in range(len(listPix20)):
     file.write(str(listPix20[i]) + ';' + str(listPix30[i]) + ';' + str(listPix40[i]) + ';' + str(listPix50[i]) + ';' + str(listPix60[i]) + '\r')
 file.close()
+
 cv2.waitKey()
