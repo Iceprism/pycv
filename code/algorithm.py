@@ -6,6 +6,7 @@ import time
 # 将缺少上边缘或者下边缘的线剔除掉，
 # 选择上下线策略优化，判断前后线有无
 # 去除对比度增强，执行效率提升，0.01s一帧 原0.28s一帧
+# 改写取样函数
 
 src = cv2.imread("test2.jpg")
 cv2.imshow("src1", src)
@@ -22,15 +23,6 @@ srcLine = src.copy()
 a = 1.3
 b = 0
 
-for i in range(rows):
-    for j in range(cols):
-        color = img[i, j] * a + b
-        if color > 255:
-            dst[i, j] = 255
-        else:
-            dst[i, j] = color
-
-cv2.imshow('dst', dst)
 
 dst = img.copy()
 
@@ -43,23 +35,30 @@ listPix40 = []
 listPix50 = []
 listPix60 = []
 
-for i in range(0, rows):
-    color = dst[i, 20]
-    listPix20.append(color)
-    color = dst[i, 40]
-    listPix30.append(color)
-    color = dst[i, 80]
-    listPix40.append(color)
-    color = dst[i, 100]
-    listPix50.append(color)
-    color = dst[i, 120]
-    listPix60.append(color)
+
 
 # print(listPix)
-for i in range(len(listPix20)):
-    listPixavr.append(int((int(listPix20[i])+int(listPix30[i])+int(listPix40[i])+int(listPix50[i])+int(listPix60[i]))/5))
+# for i in range(len(listPix20)):
+#     listPixavr.append(int((int(listPix20[i])+int(listPix30[i])+int(listPix40[i])+int(listPix50[i])+int(listPix60[i]))/5))
 
+# 重构建取样函数
 
+def getAvrPix():
+    sampelLine = []
+    x = 50
+    color = 0
+    for i in range(12):
+        x = x + 15
+        sampelLine.append(x)
+        # print(sampelLine)
+
+    for i in range(0, rows):
+        for j in range(len(sampelLine)):
+            color = color + int(dst[i, j])
+        color = int(color/12)
+        listPixavr.append(color)
+
+getAvrPix()
 
 lastPix = []
 lastPixT = []
