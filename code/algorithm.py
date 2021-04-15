@@ -2,10 +2,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 上一版本成功验证正常图片情况
-# 开始测试实际情况，使用5条线进行取样平均，获得新的线
-# 测试通过，下一步将增加缺线即剔除，将缺少上边缘或者下边缘的线剔除掉
-
+# 将缺少上边缘或者下边缘的线剔除掉，
+# 选择上下线策略优化，判断前后线有无
 
 src = cv2.imread("test2.jpg")
 cv2.imshow("src1", src)
@@ -63,7 +61,7 @@ for i in range(0, len(listPixavr) - 1):
         print(i)
         lastPix.append(i)
         lastPixT.append(i)
-    if subPix < -20:
+    if subPix < -40:
         print(i)
         lastPix.append(i)
         lastPixD.append(i)
@@ -72,8 +70,18 @@ print(lastPix, lastPixT, lastPixD)
 for j in range(4):
     for i in range(len(lastPix)):
         try:
-            if lastPix[i + 1] - lastPix[i] < 5:
-                lastPix.remove(lastPix[i + 1])
+            localPix = lastPix[i]
+            print(localPix)
+            if i % 2 == 0:
+                if lastPix[i + 1] - lastPix[i] > 20:
+                    lastPix.remove(lastPix[i])
+            if lastPix[i] - lastPix[i-1] >20 :  # 前面无线
+                if lastPix[i + 1] - lastPix[i] < 5:
+                    lastPix.remove(lastPix[i + 1]) # 减去i+1 这条线
+            if lastPix[i] - lastPix[i-1] <20 :
+                if lastPix[i + 1] - lastPix[i] < 5:
+                    lastPix.remove(lastPix[i]) # 减去i 这条线
+
         except IndexError:
             pass
 
