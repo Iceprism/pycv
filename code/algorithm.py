@@ -30,13 +30,31 @@ for i in range(0,rows):
 
 # print(listPix)
 
+lastPix = []
+lastPixT = []
+lastPixD = []
+
 for i in range(0,len(listPix)-1):
     subPix = int(listPix[i+1])-int(listPix[i])
     if subPix >58:
         print(i)
-    if subPix < -60:
+        lastPix.append(i)
+        lastPixT.append(i)
+    if subPix < -35:
         print(i)
+        lastPix.append(i)
+        lastPixD.append(i)
 
+print(lastPix,lastPixT,lastPixD)
+
+for i in range(len(lastPix)):
+    try:
+        if lastPix[i+1]-lastPix[i] == 1:
+            lastPix.remove(lastPix[i+1])
+    except IndexError:
+        pass
+
+print(lastPix)
 print("24:",listPix[24],listPix[25],listPix[26])
 
 file = open('listex.txt', 'w', encoding='utf-8')
