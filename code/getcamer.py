@@ -6,7 +6,7 @@ ret = cap.set(cv2.CAP_PROP_FRAME_WIDTH,1080)
 ret = cap.set(cv2.CAP_PROP_FRAME_HEIGHT,720)
 ret,frame = cap.read()
 
-# frame = frame[370:620, 385:730]
+frame = frame[370:620, 385:730]
 cv2.imwrite("camSave.jpg",frame)
 while(cap.isOpened()):
     listPixavr = []
@@ -26,7 +26,8 @@ while(cap.isOpened()):
         sampelLine = []
         x = 30
         color = 0
-        for i in range(12):
+        CaiyanX = 12
+        for i in range(CaiyanX):
             x = x + 15
             sampelLine.append(x)
             # print(sampelLine)
@@ -34,7 +35,7 @@ while(cap.isOpened()):
         for i in range(0, rows):
             for j in range(len(sampelLine)):
                 color = color + int(dst[i, j])
-            color = int(color / 12)
+            color = int(color / CaiyanX)
             listPixavr.append(color)
 
 
